@@ -81,25 +81,25 @@ export default {
     methods: {
         async subirArchivo() {
             if (this.$refs.form.validate()) {
-                const file = new FormData();
-                let config = {
+                const config = {
                     method: 'post',
                     maxBodyLength: Infinity,
-                    url: 'http://localhost:3001/path/file/65134b6d0f6c954121b0eed2',
+                    url: `${this.url}/path/file/${this.location}`,
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     data: this.paquete.file
                 }
-                // Agregar el archivo al FormData
-                file.append('file', this.paquete.file);
-                await this.axios.post(`${this.url}/path/file/${this.location}`, file, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Max'
+                await this.axios.request(config).then(response => {
+                    switch (response.status) {
+                        case 201:
+                            this.$refs.form.reset();
+                            break;
+
+                        default:
+                            console.log(response.data);
+                            break;
                     }
-                }).then(response => {
-                    console.log(response.data);
                 });
             }
         },
