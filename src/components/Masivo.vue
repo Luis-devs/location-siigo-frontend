@@ -1,110 +1,61 @@
 <template>
     <v-container>
-        <div class="iniciarSesion">
+        <div class="subirMasivo">
             <v-row justify="center" no-gutters>
                 <v-card width="600" max-with="700" class="my-auto">
                     <v-card-title justify="center">
-                        <h2>Iniciar sesión</h2>
+                        <h2>Subir masivo(JSON)</h2>
                     </v-card-title>
                     <v-card-text>
                         <v-form
                             ref="form"
                             v-model="valid"
-                            lazy-validation>
-                            <v-text-field
-                                v-model="paquete.email"
-                                :rules="emailRules"
-                                label="Correo" placeholder="correo@gmail.com"
-                                required></v-text-field>
-                            <v-text-field
-                                v-model="paquete.contrasena"
-                                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                :type="showPassword ? 'text' : 'password'"
-                                label="Contraseña"
-                                @click:append="showPassword = !showPassword"></v-text-field>
+                            lazy-validation enctype="multipart/form-data">
+                            <v-autocomplete :items="locations" item-text="name" item-value="_id" no-data-text="Sin lugares para agregarle ubicaciones"></v-autocomplete>
+                            <v-file-input
+                                v-model="paquete.file"
+                                accept="application/json"
+                                placeholder="Subir JSON"
+                                prepend-icon="mdi mdi-upload"
+                                label="Archivo JSON" :rules="nameRules"></v-file-input>
                         </v-form>
                     </v-card-text>
                     <v-card-actions justify="center" class="flex-column">
                         <v-btn
                             color="success"
                             class="mr-4"
-                            @click="ingresar">
-                            Ingresar
+                            @click="subirArchivo">
+                            Subir archivo
                         </v-btn>
-                        <span class="mt-3">O</span>
-                        <a @click="registro">Regístrate</a>
                     </v-card-actions>
                 </v-card>
             </v-row>
         </div>
-        <!-- Registro -->
-        <v-dialog
-            transition="dialog-top-transition"
-            max-width="600" v-model="dialog">
-            <v-card>
-                <v-toolbar
-                    color="primary"
-                    dark elevation="2">Regístrate</v-toolbar>
-                <v-card-text>
-                    <v-form
-                        ref="form"
-                        v-model="valid"
-                        lazy-validation class="mt-3">
-                        <v-text-field
-                            v-model="paqueteRegistro.email"
-                            :rules="emailRules"
-                            label="Correo" placeholder="correo@gmail.com"
-                            required></v-text-field>
-                        <v-text-field
-                            v-model="paqueteRegistro.contrasena"
-                            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="showPassword ? 'text' : 'password'"
-                            label="Contraseña"
-                            @click:append="showPassword = !showPassword"></v-text-field>
-                    </v-form>
-                </v-card-text>
-                <v-card-actions class="justify-end">
-                    <v-btn
-                        color="success"
-                        @click="registro">Regístrarme</v-btn>
-                    <v-btn
-                        color="error"
-                        @click="dialog = false">Cancelar</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </v-container>
 </template>
 <script>
 export default {
+    name: 'MasivoVue',
     data: () => ({
+        url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
         valid: true,
-        dialog: false,
-        showPassword: false,
-        paquete: {
-            email: null, contrasena: null
-        },
-        paqueteRegistro: { email: null, contrasena: null },
+        locations: [],
         nameRules: [
-            v => !!v || 'Campo requerido'
+            v => !!v || 'Escoja un archivo'
         ],
-        email: '',
-        emailRules: [
-            v => !!v || 'Correo es requerido',
-            v => /.+@.+\..+/.test(v) || 'Ingrese un correo válido',
-        ],
+        paquete: {
+            file: null
+        },
     }),
 
     methods: {
-        ingresar() {
+        async subirArchivo() {
             if (this.$refs.form.validate()) {
-                alert('válido');
+                await this.axios.get(`${this.url}/`).then(response => {
+                    console.log(response.data);
+                });
             }
         },
-        registro() {
-            this.showPassword = false;
-            this.dialog = true;
-        }
     },
 }
 </script>

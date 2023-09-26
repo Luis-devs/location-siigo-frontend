@@ -1,13 +1,15 @@
 <template>
-    <div>
-
-    </div>
+    <Masivo />
 </template>
 <script>
+import Masivo from '@/components/Masivo.vue';
 export default {
     name: 'SubirVue',
-    data: () => {
+    components: {
+        Masivo
+    },
+    data: () => ({
 
-    }
+    })
 }
 </script>
