@@ -32,7 +32,7 @@
                             Ingresar
                         </v-btn>
                         <span class="mt-3">O</span>
-                        <a @click="registro">Regístrate</a>
+                        <a @click="dialogRegistro">Regístrate</a>
                     </v-card-actions>
                 </v-card>
             </v-row>
@@ -47,8 +47,8 @@
                     dark elevation="2">Regístrate</v-toolbar>
                 <v-card-text>
                     <v-form
-                        ref="form"
-                        v-model="valid"
+                        ref="formRegistro"
+                        v-model="validRegistro"
                         lazy-validation class="mt-3">
                         <v-text-field
                             v-model="paqueteRegistro.email"
@@ -78,7 +78,9 @@
 <script>
 export default {
     data: () => ({
+        url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
         valid: true,
+        validRegistro: true,
         dialog: false,
         showPassword: false,
         paquete: {
@@ -101,10 +103,26 @@ export default {
                 alert('válido');
             }
         },
-        registro() {
+        dialogRegistro() {
             this.showPassword = false;
             this.dialog = true;
+
+        },
+        async registro() {
+            if (this.$refs.formRegistro.validate()) {
+                await this.axios.post(`${this.url}/user/create`, this.paqueteRegistro).then(response => {
+                    switch (response.status) {
+                        case 201:
+                            this.$refs.formRegistro.reset();
+                            break;
+
+                        default:
+                            console.log(response.data);
+                            break;
+                    }
+                })
+            }
         }
-    },
+    }
 }
 </script>
