@@ -109,6 +109,7 @@ export default {
                     switch (response.status) {
                         case 201:
                             this.$refs.formLugar.reset();
+                            this.getLocation();
                             break;
                         default:
                             console.log(response.data);
@@ -116,10 +117,13 @@ export default {
                     }
                 });
             }
+        },
+        async getLocation() {
+            await this.axios.get(`${this.url}/location`).then(response => this.locations = response.data);
         }
     },
-    async created() {
-        await this.axios.get(`${this.url}/location`).then(response => this.locations = response.data);
+    created() {
+        this.getLocation();
     }
 }
 </script>

@@ -21,7 +21,7 @@ export default {
             lienzo.strokeStyle = '#000000'; //Defino el color en hexagesimal
             const radius = 5;
             points.forEach(point => {
-                point.ubicaciones.forEach(ubicacion => {
+                point.ubicaciones.forEach((ubicacion,index) => {
                     let u1 = ubicacion.posX * 30, u2 = ubicacion.posY * 30;
                     lienzo.beginPath();
                     lienzo.fillStyle = '#0077aa';
@@ -29,7 +29,7 @@ export default {
                     lienzo.arc(u1, u2, radius, 0, 2 * Math.PI, false);
                     lienzo.fill();
                     lienzo.fillStyle = '#000';
-                    lienzo.fillText(ubicacion.nombre, (u1 - 1), (u2 - 5), 45);
+                    lienzo.fillText(`${ubicacion.nombre}(${index+1})`, (u1 - 1), (u2 - 5), 65);
                     lienzo.font = "15px Verdana";
                     lienzo.stroke();
                     lienzo.closePath();
