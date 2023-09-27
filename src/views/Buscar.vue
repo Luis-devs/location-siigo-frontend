@@ -10,7 +10,7 @@
                         ref="form"
                         v-model="valid"
                         lazy-validation>
-                        <v-autocomplete v-model="location" :items="locations" prepend-icon="mdi mdi-map-search" item-text="name" item-value="_id" no-data-text="Sin lugares para buscar rutas" :rules="autoRules" placeholder="Escoja un lugar"></v-autocomplete>
+                        <v-autocomplete label="Escoja lugar" v-model="location" :items="locations" append-icon="mdi mdi-map-search" item-text="name" item-value="_id" no-data-text="Sin lugares para buscar rutas" :rules="autoRules" placeholder="Escoja un lugar"></v-autocomplete>
                     </v-form>
                 </v-card-text>
                 <v-card-actions justify="center" class="flex-column">
@@ -37,7 +37,9 @@ export default {
         valid: true,
         url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
         locations: [],
-        location: null
+        location: null, autoRules: [
+            v => !!v || 'Escoja un lugar'
+        ]
     }), methods: {
         async checkSesion() {
             if (sessionStorage.currentSession) {
@@ -51,7 +53,9 @@ export default {
             }
         },
         buscarRuta() {
-            console.log('ruta');
+            if (this.$refs.form.validate()) {
+                console.log('ruta');
+            }
         }
     }, async created() {
         this.checkSesion();
