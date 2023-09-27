@@ -12,7 +12,7 @@
                             v-model="valid"
                             lazy-validation>
                             <v-text-field
-                                v-model="paquete.email"
+                                v-model="paquete.correo"
                                 :rules="emailRules"
                                 label="Correo" placeholder="correo@gmail.com"
                                 required></v-text-field>
@@ -51,7 +51,7 @@
                         v-model="validRegistro"
                         lazy-validation class="mt-3">
                         <v-text-field
-                            v-model="paqueteRegistro.email"
+                            v-model="paqueteRegistro.correo"
                             :rules="emailRules"
                             label="Correo" placeholder="correo@gmail.com"
                             required></v-text-field>
@@ -84,13 +84,13 @@ export default {
         dialog: false,
         showPassword: false,
         paquete: {
-            email: null, contrasena: null
+            correo: null, contrasena: null
         },
-        paqueteRegistro: { email: null, contrasena: null },
+        paqueteRegistro: { correo: null, contrasena: null },
         nameRules: [
             v => !!v || 'Campo requerido'
         ],
-        email: '',
+        correo: '',
         emailRules: [
             v => !!v || 'Correo es requerido',
             v => /.+@.+\..+/.test(v) || 'Ingrese un correo válido',
@@ -98,9 +98,24 @@ export default {
     }),
 
     methods: {
-        ingresar() {
+        async ingresar() {
             if (this.$refs.form.validate()) {
-                alert('válido');
+                await this.axios.post(`${this.url}/user/iniciarSesion`, this.paquete).then(response => {
+                    switch (response.status) {
+                        case 201:
+                            if (response.data.status) {
+                                sessionStorage.currentSession = response.data.currentSesion;
+                                this.$router.push('/home/subir')
+                            }
+                            else {
+                                alert(response.data.msg);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                })
             }
         },
         dialogRegistro() {
@@ -122,6 +137,15 @@ export default {
                     }
                 })
             }
+        }
+    },
+    async created() {
+        if (sessionStorage.currentSession) {
+            await this.axios.get(`${this.url}/user/checkSesion/${sessionStorage.currentSession}`).then(response => {
+                if (response.data) {
+                    this.$router.push('/home/buscar');
+                }
+            });
         }
     }
 }
