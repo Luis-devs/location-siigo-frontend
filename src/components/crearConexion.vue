@@ -98,6 +98,8 @@ export default {
       }
     },
     async crearPunto() {
+      this.point.posX = parseInt(this.point.posX);
+      this.point.posY = parseInt(this.point.posY);
       let config = {
         method: "post",
         maxBodyLength: Infinity,
