@@ -23,7 +23,7 @@
             <div class="input-puntos">
               <div>
                 <v-text-field
-                  v-model="point.pointName"
+                  v-model="point.nombre"
                   :rules="nameRules"
                   :counter="20"
                   label="Nombre del punto"
@@ -33,7 +33,7 @@
 
               <div>
                 <v-text-field
-                  v-model="point.pointX"
+                  v-model="point.posX"
                   :rules="nameRules"
                   :counter="10"
                   label="Posición en X"
@@ -43,7 +43,7 @@
 
               <div>
                 <v-text-field
-                  v-model="point.pointY"
+                  v-model="point.posY"
                   :rules="nameRules"
                   :counter="10"
                   label="Posición en Y"
@@ -116,12 +116,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      /*
-      await this.axios.post(
-        `${this.url}/path/create-point/${this.location}`,
-        this.point
-        );
-        */
     },
   },
   async created() {
