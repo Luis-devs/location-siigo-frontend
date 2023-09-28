@@ -104,7 +104,7 @@ export default {
                     switch (response.status) {
                         case 201:
                             if (response.data.status) {
-                                sessionStorage.currentSession = response.data.currentSesion;
+                                localStorage.currentSession = response.data.currentSesion;
                                 this.$router.push('/home/subir')
                             }
                             else {
@@ -128,7 +128,10 @@ export default {
                 await this.axios.post(`${this.url}/user/create`, this.paqueteRegistro).then(response => {
                     switch (response.status) {
                         case 201:
-                            this.$refs.formRegistro.reset();
+                            if (response.data.status) {
+                                this.$refs.formRegistro.reset();
+                            }
+                            alert(response.data.msg);
                             break;
 
                         default:
@@ -140,8 +143,8 @@ export default {
         }
     },
     async created() {
-        if (sessionStorage.currentSession) {
-            await this.axios.get(`${this.url}/user/checkSesion/${sessionStorage.currentSession}`).then(response => {
+        if (localStorage.currentSession) {
+            await this.axios.get(`${this.url}/user/checkSesion/${localStorage.currentSession}`).then(response => {
                 if (response.data) {
                     this.$router.push('/home/buscar');
                 }

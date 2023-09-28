@@ -21,15 +21,15 @@ export default {
             lienzo.strokeStyle = '#000000'; //Defino el color en hexagesimal
             const radius = 5;
             points.forEach(point => {
-                point.ubicaciones.forEach((ubicacion,index) => {
-                    let u1 = ubicacion.posX * 30, u2 = ubicacion.posY * 30;
+                point.ubicaciones.forEach((ubicacion, index) => {
+                    let u1 = ubicacion.posX > 50 ? ubicacion.posX : ubicacion.posX * 30, u2 = ubicacion.posY > 50 ? ubicacion.posY : ubicacion.posY * 30;
                     lienzo.beginPath();
                     lienzo.fillStyle = '#0077aa';
                     lienzo.strokeStyle = '#0077aa47';
                     lienzo.arc(u1, u2, radius, 0, 2 * Math.PI, false);
                     lienzo.fill();
                     lienzo.fillStyle = '#000';
-                    lienzo.fillText(`${ubicacion.nombre}(${index+1})`, (u1 - 1), (u2 - 5), 65);
+                    lienzo.fillText(`${ubicacion.nombre}(${index + 1})`, (u1 - 1), (u2 - 5), 65);
                     lienzo.font = "15px Verdana";
                     lienzo.stroke();
                     lienzo.closePath();
@@ -54,7 +54,7 @@ export default {
                     //lienzo.moveTo(200, 100);// lo ubicó para iniciar el dibujo
                     //lienzo.lineTo(ubicacion.posY, xInit);// trazo la linea hasta este punto
                     lienzo.moveTo(xInit, yInit);// lo ubicó para iniciar el dibujo
-                    lienzo.lineTo(ubicacion.posX * 30, ubicacion.posY * 30);
+                    lienzo.lineTo(ubicacion.posX > 50 ? ubicacion.posX : ubicacion.posX * 30, ubicacion.posY > 50 ? ubicacion.posY : ubicacion.posY * 30);
                     lienzo.stroke();// levanto el lápiz
                     lienzo.closePath();
                 }
