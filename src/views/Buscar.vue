@@ -11,6 +11,7 @@
                         v-model="valid"
                         lazy-validation>
                         <v-autocomplete label="Escoja lugar" v-model="location" :items="locations" append-icon="mdi mdi-map-search" item-text="name" item-value="_id" no-data-text="Sin lugares para buscar rutas" :rules="autoRules" placeholder="Escoja un lugar"></v-autocomplete>
+                        <v-autocomplete label="Escoja punto" v-model="punto" :items="puntos" append-icon="mdi mdi-map-search" item-text="nombre" item-value="nombre" no-data-text="Sin puntos" placeholder="Punto de inicio"></v-autocomplete>
                     </v-form>
                 </v-card-text>
                 <v-card-actions justify="center" class="flex-column">
@@ -37,7 +38,8 @@ export default {
         valid: true,
         url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
         locations: [],
-        location: null, autoRules: [
+        location: null,
+        punto: null, puntos: [], autoRules: [
             v => !!v || 'Escoja un lugar'
         ]
     }), methods: {
@@ -52,14 +54,31 @@ export default {
                 this.$router.push('/');
             }
         },
-        buscarRuta() {
+        async buscarRuta() {
             if (this.$refs.form.validate()) {
-                console.log('ruta');
+                await this.axios.post(`${this.url}/dijkstra/${this.location}`).then(response => {
+                    console.log(response);
+                });
             }
         }
-    }, async created() {
+    },
+    async created() {
         this.checkSesion();
         await this.axios.get(`${this.url}/location`).then(response => this.locations = response.data);
+    },
+    watch: {
+        location() {
+            this.puntos = [];
+            this.axios.get(`${this.url}/path/location/${this.location}`).then(response => {
+                const paths = response.data;
+                paths.forEach(path => {
+                    path.ubicaciones.forEach(ubicacion => {
+                        this.puntos.push({ nombre: ubicacion.nombre });
+                    });
+
+                });
+            });
+        }
     }
 }
 </script>
