@@ -80,9 +80,9 @@ export default {
   }),
   methods: {
     async checkSesion() {
-      if (sessionStorage.currentSession) {
+      if (localStorage.currentSession) {
         await this.axios
-          .get(`${this.url}/user/checkSesion/${sessionStorage.currentSession}`)
+          .get(`${this.url}/user/checkSesion/${localStorage.currentSession}`)
           .then((response) => {
             if (!response.data) {
               this.$router.push("/");
