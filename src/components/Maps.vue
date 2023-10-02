@@ -59,7 +59,6 @@ export default {
                     lienzo.closePath();
                 }
             });
-            console.log('----------------------------------------------------------------');
         }
     },
     async mounted() {
