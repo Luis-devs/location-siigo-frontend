@@ -11,7 +11,7 @@
 export default {
     name: "PlanoVue",
     data: () => ({
-        url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
+        url: `${process.env.VUE_APP_API_URL}`,
 
     }),
     methods: {

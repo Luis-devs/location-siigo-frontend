@@ -73,7 +73,7 @@ export default {
       posY: null,
     },
     valid: true,
-    url: `${process.env.VUE_APP_API_URL}:${process.env.VUE_APP_API_PORT}`,
+    url: `${process.env.VUE_APP_API_URL}`,
     locations: [],
     location: null,
     autoRules: [(v) => !!v || "Escoja un lugar"],

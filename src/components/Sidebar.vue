@@ -20,7 +20,7 @@
       <v-list-item
         v-for="(item, index) in menu"
         :key="index"
-        @click="ir(item.path)"
+        :to="item.path"
       >
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
