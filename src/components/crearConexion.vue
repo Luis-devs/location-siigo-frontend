@@ -17,8 +17,7 @@
               no-data-text="Sin lugares para buscar rutas"
               onchange="obtenerPaht()"
               :rules="autoRules"
-              placeholder="Escoja un lugar"
-            ></v-autocomplete>
+              placeholder="Escoja un lugar"></v-autocomplete>
 
             <div class="input-puntos">
               <div>
@@ -27,8 +26,7 @@
                   :rules="nameRules"
                   :counter="20"
                   label="Nombre del punto"
-                  required
-                ></v-text-field>
+                  required></v-text-field>
               </div>
 
               <div>
@@ -37,8 +35,7 @@
                   :rules="nameRules"
                   :counter="10"
                   label="Posición en X"
-                  required
-                ></v-text-field>
+                  required></v-text-field>
               </div>
 
               <div>
@@ -47,8 +44,7 @@
                   :rules="nameRules"
                   :counter="10"
                   label="Posición en Y"
-                  required
-                ></v-text-field>
+                  required></v-text-field>
               </div>
             </div>
           </v-form>
@@ -67,15 +63,18 @@ export default {
   name: "BuscarVue",
   components: {},
   data: () => ({
+    nameRules: [
+      v => !!v || 'Escoja un archivo'
+    ],
     point: {
       nombre: "",
       posX: null,
       posY: null,
     },
+    location: null,
     valid: true,
     url: `${process.env.VUE_APP_API_URL}`,
     locations: [],
-    location: null,
     autoRules: [(v) => !!v || "Escoja un lugar"],
   }),
   methods: {
@@ -103,7 +102,7 @@ export default {
       let config = {
         method: "post",
         maxBodyLength: Infinity,
-        url: "http://localhost:3001/path/create-point/65145ff39c7a6d18775a7aa2",
+        url: `${this.url}/path/create-point/${this.location}`,
         headers: {
           "Content-Type": "application/json",
         },

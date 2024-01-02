@@ -105,9 +105,20 @@ export default {
             return latLng(lat, lng);
         }
     },
+    watch: {
+        async location() {
+            this.puntos = [];
+            await this.axios.get(`${this.url}/path/location/${this.location}`).then(response => {
+                if (Array.isArray(response.data.ubicaciones)) {
+                    response.data.ubicaciones.forEach(ubicacion => {
+                        this.puntos.push({ nombre: ubicacion.nombre });
+                    });
+                }
+            });
+        }
+    },
     async created() {
         delete L.Icon.Default.prototype._getIconUrl;
-
         L.Icon.Default.mergeOptions({
             iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
             iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -116,19 +127,5 @@ export default {
         this.checkSesion();
         await this.axios.get(`${this.url}/location`).then(response => this.locations = response.data);
     },
-    watch: {
-        location() {
-            this.puntos = [];
-            this.axios.get(`${this.url}/path/location/${this.location}`).then(response => {
-                const paths = response.data;
-                paths.forEach(path => {
-                    path.ubicaciones.forEach(ubicacion => {
-                        this.puntos.push({ nombre: ubicacion.nombre });
-                    });
-
-                });
-            });
-        }
-    }
 }
 </script>
